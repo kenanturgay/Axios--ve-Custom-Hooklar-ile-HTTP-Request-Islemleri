@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const EditMovieForm = (props) => {
+  const { id } = useParams();
+  const history = useHistory();
   const { setMovies } = props;
   const [movie, setMovie] = useState({
     title: '',
@@ -12,6 +16,13 @@ const EditMovieForm = (props) => {
     metascore: 0,
     description: '',
   });
+
+  useEffect(() => {
+    axios
+      .get(`https://nextgen-project.onrender.com/api/s11d3/movies/${id}`)
+      .then((res) => setMovie({ ...res.data }))
+      .catch((err) => console.error(err));
+  }, [id]);
 
   const handleChange = (e) => {
     setMovie({
@@ -22,6 +33,15 @@ const EditMovieForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    axios
+      .put(
+        `https://nextgen-project.onrender.com/api/s11d3/movies/${id}`,
+        movie
+      )
+      .then((res) => {
+        setMovies(res.data);
+        history.push(`/movies/${movie.id}`);
+      });
   };
 
   const { title, director, genre, metascore, description } = movie;

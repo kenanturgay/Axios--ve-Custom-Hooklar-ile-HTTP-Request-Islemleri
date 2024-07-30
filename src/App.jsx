@@ -18,7 +18,7 @@ const App = (props) => {
 
   useEffect(() => {
     axios
-      .get('https://nextgen-project.onrender.com/api/s11d3/movies')
+      .get(`https://nextgen-project.onrender.com/api/s11d3/movies`)
       .then((res) => {
         setMovies(res.data);
       })
@@ -93,6 +93,9 @@ const App = (props) => {
             </Route>
             <Route path="/">
               <Redirect to="/movies" />
+            </Route>
+            <Route path="movies/add">
+              <AddMovieForm />
             </Route>
           </Switch>
         </div>
